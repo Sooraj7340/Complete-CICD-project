@@ -114,7 +114,7 @@ resource "aws_eks_node_group" "project" {
   }
 }
 
-resource "aws_iam_role" "projecct_cluster_role" {
+resource "aws_iam_role" "project_cluster_role" {
   name = "project-cluster-role"
 
   assume_role_policy = <<EOF
@@ -132,6 +132,7 @@ resource "aws_iam_role" "projecct_cluster_role" {
 }
 EOF
 }
+
 
 resource "aws_iam_role_policy_attachment" "project_cluster_role_policy" {
   role       = aws_iam_role.project_cluster_role.name
