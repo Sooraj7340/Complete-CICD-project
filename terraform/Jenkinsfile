@@ -1,0 +1,22 @@
+pipeline {
+    parameters {
+        choice(name: 'terraformAction', choices: ['apply', 'destroy'], descreption: 'Choose Terraform action to perform')
+    }
+
+    environment {
+        AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
+        AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
+    }
+
+    agent any
+
+    stages {
+        stage('Git Checkout') {
+            steps {
+                script {
+                    git branch: 'infra', url: 'https://github.com/Sooraj7340/Complete-CICD-project.git'
+                }
+            }
+        }
+    }
+}
