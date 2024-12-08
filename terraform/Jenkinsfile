@@ -11,10 +11,48 @@ pipeline {
     agent any
 
     stages {
-        stage('Git Checkout') {
+        stage ('Git Checkout') {
             steps {
                 script {
                     git branch: 'infra', url: 'https://github.com/Sooraj7340/Complete-CICD-project.git'
+                }
+            }
+        }
+
+        stage ('Plan') {
+            steps {
+                sh '''
+                    cd terraform
+                    terraform init
+                    terraform plan -out=tfplan
+                    terraform show -no-color tfplan > tfplan.txt
+                '''
+            }
+        }
+
+        stage ('Approval') {
+            steps {
+                script {
+                    def plan = readFile 'terraform/tfplan.txt'
+                    input message: "Do you want to proceed with the Terraform action?",
+                    parameters: [text(name: 'Plan', description: 'Please review the plan', defaultValue: plan)]
+                }
+            }
+        }
+
+        stage('Apply or Destroy') {
+            when {
+                expression {
+                    return params.terraformAction == 'apply' || params.terraformAction == 'destroy'
+                }
+            }
+            steps {
+                script {
+                    if (params.terraformAction == 'apply') {
+                        sh "cd terraform/ ; terraform apply -input=false tfplan"
+                    } else if (params.terraformAction == 'destroy') {
+                        sh "cd terraform/ ; terraform destroy -auto-approve"
+                    }
                 }
             }
         }
