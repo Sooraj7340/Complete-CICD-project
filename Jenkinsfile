@@ -61,18 +61,18 @@ pipeline {
         
         stage('Deploy To Kubernetes') {
             steps {
-                withKubeConfig(caCertificate: '', clusterName: 'project-cluster', contextName: '', credentialsId: 'kube', namespace: 'project', restrictKubeConfigAccess: false, serverUrl: 'https://1121A9729D93F73A00B34D4100FB65ED.gr7.us-east-1.eks.amazonaws.com') {
-                    sh "kubectl get pods -n project"
-                    sh "kubectl apply -f deployment.yml -n project"
+                withKubeConfig(caCertificate: '', clusterName: 'project-cluster', contextName: '', credentialsId: 'kube', namespace: 'microdegree', restrictKubeConfigAccess: false, serverUrl: 'https://4F60E1260DC1F61D12A2AFE241FD3ED2.gr7.us-east-1.eks.amazonaws.com') {
+                    sh "kubectl get pods -n microdegree"
+                    sh "kubectl apply -f deployment.yml -n microdegree"
                 }
             }
         }
 
         stage('Verify the Deployment') {
             steps {
-                withKubeConfig(caCertificate: '', clusterName: 'project-cluster', contextName: '', credentialsId: 'kube', namespace: 'project', restrictKubeConfigAccess: false, serverUrl: 'https://1121A9729D93F73A00B34D4100FB65ED.gr7.us-east-1.eks.amazonaws.com') {
-                    sh "kubectl get pods -n project"
-                    sh "kubectl get svc -n project"
+                withKubeConfig(caCertificate: '', clusterName: 'project-cluster', contextName: '', credentialsId: 'kube', namespace: 'microdegree', restrictKubeConfigAccess: false, serverUrl: 'https://4F60E1260DC1F61D12A2AFE241FD3ED2.gr7.us-east-1.eks.amazonaws.com') {
+                    sh "kubectl get pods -n microdegree"
+                    sh "kubectl get svc -n microdegree"
                 }
             }
         }
